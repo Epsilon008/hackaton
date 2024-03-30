@@ -1,5 +1,4 @@
 const ToDoModel = require('../models/ToDoModel')
-
 module.exports.getToDo = async(req, res) => {
     const toDo = await ToDoModel.find()
     res.send(toDo)
@@ -7,10 +6,16 @@ module.exports.getToDo = async(req, res) => {
 
 
 module.exports.saveToDo = async (req, res) => {
-    const {text} = req.body
+    const {text, description} = req.body
 
     ToDoModel
         .create({text})
+        .then((data) => {
+            console.log("Added Successfully")
+            console.log(data)
+            res.send(data)
+        })
+        .create({description})
         .then((data) => {
             console.log("Added Successfully")
             console.log(data)
@@ -29,11 +34,13 @@ module.exports.saveToDo = async (req, res) => {
 // }
 
 module.exports.updateToDo = async (req, res) => {
-    const {_id, text} = req.body
+    const {_id, text, description} = req.body
 
     ToDoModel
-        .findByIdAndUpdate(_id, {text})
+        .findByIdAndUpdate(_id, {text, description}, { new: true })
         .then(()=>res.send("Update successfully"))
+        // .findByIdAndUpdate(_id, {description})
+        // .then(()=>res.send("Update successfully"))
         .catch((err)=> console.log(err))
 
  
